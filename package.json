@@ -1,0 +1,21 @@
+{
+  "name": "ressources-pas-humaines-trainer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.ts",
+  "scripts": {
+    "dev": "nodemon -w src src/app.ts"
+  },
+  "keywords": [],
+  "author": "FiestaTheNewbieDev",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.11.30",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.0",
+    "pdf-parse": "^1.1.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  }
+}
