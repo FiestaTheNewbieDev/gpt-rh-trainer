@@ -21,7 +21,7 @@ export async function analyzeJson(filePath: string, outputFilePath: string) {
       { role: "user", content: object.text },
       { role: "assistant", content: response.data.choices[0].message.content }
     );
-    console.log(history);
+
     fs.appendFileSync(
       outputFilePath,
       JSON.stringify({ messages: history }, null) + "\n"
@@ -29,10 +29,10 @@ export async function analyzeJson(filePath: string, outputFilePath: string) {
   }
 }
 
-export function analyzePdf(filePath: string, outputFilePath: string) {
+export async function analyzePdf(filePath: string, outputFilePath: string) {
   const dataBuffer = fs.readFileSync(filePath);
-  pdf(dataBuffer).then(async (data: any) => {
-    console.log("here")
+
+  await pdf(dataBuffer).then(async (data: any) => {
     const history: IMessage[] = [
       {
         role: "system",

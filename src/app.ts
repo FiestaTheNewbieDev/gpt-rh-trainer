@@ -72,15 +72,14 @@ async function main() {
     loading.start("Analyzing PDF inputs");
 
     // made by me
-    pdfInputFiles.forEach((file, index) => {
-      analyzePdf(
-        path.join(PDF_INPUT_FOLDER, file),
+    for (let i = 0; i < pdfInputFiles.length; i++) {
+      loading.start(`Analyzing JSON inputs [${i + 1}/${pdfInputFiles.length}]`);
+      await analyzePdf(
+        path.join(PDF_INPUT_FOLDER, pdfInputFiles[i]),
         path.join(OUTPUT_FOLDER, fileName)
       );
-      loading.stop(
-        `PDF inputs analyzed! [${index + 1}/${pdfInputFiles.length}]`
-      );
-    });
+      loading.stop(`PDF inputs analyzed! [${i + 1}/${pdfInputFiles.length}]`);
+    }
   }
   process.exit(0);
 }
