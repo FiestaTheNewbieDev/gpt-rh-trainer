@@ -54,14 +54,19 @@ async function main() {
         } 
     }
     if (flags.analyze) {
+        const fileName = `${Date.now()}.json`;
         const loading = new Loading();
-        loading.start('Analyzing JSON inputs');
-        analyzeJson(jsonInputFolderPath, outputFolderPath);
+        for (let i = 0; i < jsonInputFiles.length; i++) {
+            loading.start(`Analyzing JSON inputs [${i + 1}/${jsonInputFiles.length}]`);
+            analyzeJson(path.join(jsonInputFolderPath, jsonInputFiles[i]), path.join(outputFolderPath, fileName));
+            loading.stop(`JSON inputs analyzed! [${i + 1}/${jsonInputFiles.length}]`);
+        }
         loading.stop('JSON inputs analyzed!');
         loading.start('Analyzing PDF inputs');
         analyzePdf(pdfInputFolderPath, outputFolderPath);
         loading.stop('PDF inputs analyzed!');
     }
+    process.exit(0);
 }
 
 function analyzeJson(filePath: string, outputFilePath: string) {
