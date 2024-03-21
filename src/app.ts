@@ -5,7 +5,7 @@ import args from 'args';
 import IMessage from './interfaces/IMessage';
 import { sendPrompt } from './openAiController';
 import genPersonality from './genPersonality';
-import Loading from './loading';
+import Loading from './Loading';
 
 args
     .option('gen-personalities', 'Gen personalities to analyze', 0)
@@ -43,21 +43,24 @@ const jsonInputFiles = fs.readdirSync(jsonInputFolderPath);
 
 async function main() {
     if (flags.genPersonalities > 0) {
+        const fileName = `${Date.now()}.json`;
         const personalities: {text: string}[] = [];
         const loading = new Loading();
-        loading.start('Generating personalities');
         for (let i = 0; i < flags.genPersonalities; i++) {
-            if (i > flags.genPersonalities / 2) {
-                personalities.push(await genPersonality(true));                
-            } else personalities.push(await genPersonality(false));
-        }
-        loading.stop('Personalities generated');
-        console.log(personalities);
-    } else {
-        throw new Error('Need an amount of personalities to generate.')
+            loading.start(`Generating personality [${i + 1}/${flags.genPersonalities}]`);
+            personalities.push(await genPersonality(i > flags.genPersonalities / 2));
+            fs.writeFileSync(path.join(jsonInputFolderPath, fileName), '[' + personalities.map(person => JSON.stringify(person)).join(',\n') + ']');
+            loading.stop(`Personality generated! [${i + 1}/${flags.genPersonalities}]`);
+        } 
     }
     if (flags.analyze) {
         const loading = new Loading();
+        loading.start('Analyzing JSON inputs');
+        analyzeJson(jsonInputFolderPath, outputFolderPath);
+        loading.stop('JSON inputs analyzed!');
+        loading.start('Analyzing PDF inputs');
+        analyzePdf(pdfInputFolderPath, outputFolderPath);
+        loading.stop('PDF inputs analyzed!');
     }
 }
 

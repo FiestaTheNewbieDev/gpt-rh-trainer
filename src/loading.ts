@@ -13,11 +13,12 @@ export default class Loading {
             else if (points === '.. ') points = '...';
             else if (points === '...') points = '   ';
         }, 500)
-        console.log('')
     }
 
     stop(message: string) {
         clearInterval(this.interval);
-        process.stdout.write(message);
+        process.stdout.clearLine(0);
+        process.stdout.cursorTo(0);
+        process.stdout.write(`${message}\n`);
     }
 }
