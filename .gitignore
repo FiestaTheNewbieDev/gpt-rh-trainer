@@ -4,7 +4,7 @@
 /build
 /input
 /output
-/temp
+/.temp
 *.env
 
 pnpm-lock.yaml

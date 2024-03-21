@@ -9,4 +9,5 @@ export const PDF_INPUT_FOLDER = process.env.PDF_INPUT_FOLDER || path.join(INPUT_
 
 export const OUTPUT_FOLDER = process.env.OUTPUT_FOLDER || path.join(process.cwd(), 'output');
 
-export const TEMP_FOLDER = process.env.TEMP_FOLDER || path.join(process.cwd(), 'temp');
+export const TEMP_FOLDER = process.env.TEMP_FOLDER || path.join(process.cwd(), '.temp');
+export const ANALYZED_FILE = path.join(TEMP_FOLDER, 'analyzed.txt');

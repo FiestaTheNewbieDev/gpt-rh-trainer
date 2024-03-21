@@ -3,6 +3,7 @@ import pdf from "pdf-parse";
 import path from "path";
 import IMessage from "./interfaces/IMessage";
 import { sendPrompt } from "./openAiController";
+import { ANALYZED_FILE, INPUT_FOLDER } from "./paths";
 
 async function analyzeData(data: string, outputFilePath: string) {
     const history: IMessage[] = [
@@ -20,10 +21,11 @@ async function analyzeData(data: string, outputFilePath: string) {
         { role: "user", content: data },
         { role: "assistant", content: response.data.choices[0].message.content }
     );
+
+    fs.appendFileSync(outputFilePath, JSON.stringify({ messages: history}) + '\n', 'utf-8');
 }
 
 export async function analyzeJson(filePath: string, outputFilePath: string) {
-  fs.writeFileSync(outputFilePath, "");
   const dataBuffer = fs.readFileSync(filePath);
   const data = JSON.parse(dataBuffer.toString());
   for (const object of data) {
@@ -32,7 +34,6 @@ export async function analyzeJson(filePath: string, outputFilePath: string) {
 }
 
 export async function analyzePdf(filePath: string, outputFilePath: string) {
-  fs.writeFileSync(outputFilePath, "");
   const dataBuffer = fs.readFileSync(filePath);
   await pdf(dataBuffer).then(async (data: any) => {
     await analyzeData(data.text, outputFilePath);
