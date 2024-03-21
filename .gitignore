@@ -6,3 +6,5 @@
 /output
 /temp
 *.env
+
+pnpm-lock.yaml
