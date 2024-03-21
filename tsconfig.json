@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "outDir": "./build",
         "rootDir": "./src",
         "esModuleInterop": true,
         "moduleDetection": "force"
