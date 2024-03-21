@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import args from "args";
 import genPersonality from "./genPersonality";
-import Loading from "./Loading";
+import Loading from "./loading";
 import {
   INPUT_FOLDER,
   JSON_INPUT_FOLDER,
@@ -69,11 +69,9 @@ async function main() {
       );
       loading.stop(`JSON inputs analyzed! [${i + 1}/${jsonInputFiles.length}]`);
     }
-    loading.start("Analyzing PDF inputs");
 
-    // made by me
     for (let i = 0; i < pdfInputFiles.length; i++) {
-      loading.start(`Analyzing JSON inputs [${i + 1}/${pdfInputFiles.length}]`);
+      loading.start(`Analyzing PDF inputs [${i + 1}/${pdfInputFiles.length}]`);
       await analyzePdf(
         path.join(PDF_INPUT_FOLDER, pdfInputFiles[i]),
         path.join(OUTPUT_FOLDER, fileName)
@@ -81,7 +79,6 @@ async function main() {
       loading.stop(`PDF inputs analyzed! [${i + 1}/${pdfInputFiles.length}]`);
     }
   }
-  process.exit(0);
 }
 
 main();
