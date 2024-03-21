@@ -44,20 +44,20 @@ const jsonInputFiles = fs.readdirSync(jsonInputFolderPath);
 async function main() {
     if (flags.genPersonalities > 0) {
         const personalities: {text: string}[] = [];
+        const loading = new Loading();
+        loading.start('Generating personalities');
         for (let i = 0; i < flags.genPersonalities; i++) {
-            const loading = new Loading();
-            loading.start('Generating personality')
             if (i > flags.genPersonalities / 2) {
                 personalities.push(await genPersonality(true));                
             } else personalities.push(await genPersonality(false));
-            loading.stop('Personality generated');
         }
+        loading.stop('Personalities generated');
         console.log(personalities);
     } else {
         throw new Error('Need an amount of personalities to generate.')
     }
     if (flags.analyze) {
-        console.log('analyze', flags.analyze);
+        const loading = new Loading();
     }
 }
 
