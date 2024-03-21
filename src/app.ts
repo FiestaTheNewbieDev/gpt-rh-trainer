@@ -1,14 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 import pdf from 'pdf-parse';
-import chalk from 'chalk';
 import args from 'args';
 import IMessage from './interfaces/IMessage';
 import { sendPrompt } from './openAiController';
 import genPersonality from './genPersonality';
+import Loading from './loading';
 
-const args = process.argv.slice(2).filter(arg => !arg.startsWith('--') && !arg.startsWith('-'));
-const flags = process.argv.slice(2).filter(arg => arg.startsWith('--') || arg.startsWith('-'));
+args
+    .option('gen-personalities', 'Gen personalities to analyze', 0)
+    .option('analyze', 'Analyze inputs to gen training files', false);
+
+const flags = args.parse(process.argv);
 
 const inputFolderPath = path.join(process.cwd(), 'input');
 if (!fs.existsSync(inputFolderPath)) {
@@ -39,35 +42,22 @@ const pdfInputFiles = fs.readdirSync(pdfInputFolderPath);
 const jsonInputFiles = fs.readdirSync(jsonInputFolderPath);
 
 async function main() {
-    if (flags.includes('--gen-personalities')) {
-        const outputFilePath = path.join(jsonInputFolderPath, `${new Date().getTime()}.json`);
-        fs.writeFileSync(outputFilePath, '');
-        const flagIndex = process.argv.indexOf('--gen-personalities');
-        const amount = parseInt(process.argv[flagIndex + 1]);
-        if (isNaN(amount)) {
-            throw new Error('Invalid amount');
+    if (flags.genPersonalities > 0) {
+        const personalities: {text: string}[] = [];
+        for (let i = 0; i < flags.genPersonalities; i++) {
+            const loading = new Loading();
+            loading.start('Generating personality')
+            if (i > flags.genPersonalities / 2) {
+                personalities.push(await genPersonality(true));                
+            } else personalities.push(await genPersonality(false));
+            loading.stop('Personality generated');
         }
-        await genPersonalities(path.join(process.cwd(), '/input/json'), amount)
-    } else if (flags.includes('--analyze')) {
-        const outputFilePath = path.join(outputFolderPath, `${new Date().getTime()}.jsonl`);
-        fs.writeFileSync(outputFilePath, '');
-        for (const file of jsonInputFiles) {
-            analyzeJson(path.join(jsonInputFolderPath, file), outputFilePath);
-        }
-        for (const file of pdfInputFiles) {
-            analyzePdf(path.join(pdfInputFolderPath, file), outputFilePath);
-        }
+        console.log(personalities);
+    } else {
+        throw new Error('Need an amount of personalities to generate.')
     }
-}
-
-async function genPersonalities(outputFilePath: string, amount: number) {
-    const personalities: {text: string}[] = [];
-    for (let i = 0; i < amount; i++) {
-        if (i > Math.floor(amount / 2)) {
-            personalities.push(await genPersonality(true));
-            console.log(personalities[i]);
-            fs.writeFileSync(outputFilePath, JSON.stringify(personalities[i]));
-        }
+    if (flags.analyze) {
+        console.log('analyze', flags.analyze);
     }
 }
 
