@@ -1,4 +1,4 @@
-import { sendPrompt } from "./openAiController";
+import { sendPrompt } from "../utils/openAiController";
 
 export default async function genPersonality(archetypal: boolean = false) {
     let prompt: string = 'Put yourself in the shoes of an individual whose personality you invent and generate an autobiographical text emphasizing your personality traits';

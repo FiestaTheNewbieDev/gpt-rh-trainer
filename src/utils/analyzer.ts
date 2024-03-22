@@ -1,17 +1,22 @@
 import fs from "fs";
 import pdf from "pdf-parse";
 import path from "path";
-import IMessage from "./interfaces/IMessage";
+import IMessage from "../interfaces/IMessage";
 import { sendPrompt } from "./openAiController";
-import { ANALYZED_FILE, INPUT_FOLDER } from "./paths";
 
 async function analyzeData(data: string, outputFilePath: string) {
     const history: IMessage[] = [
         {
             role: "system",
             content: `Based on the text send by user, determine the user's personality and follow these instructions:\n
-            - ALWAYS return your response as JSON object following this model:\n${fs.readFileSync(path.join(process.cwd(), '/src/interfaces/IPersonalityStats.ts'))}
-            - Each value of the model should be between 0 and 100\n`
+            - ALWAYS format output as JSON object following this model:\n${fs.readFileSync(path.join(process.cwd(), '/src/interfaces/IPersonalityStats.ts'))}\n
+            - NEVER use prose\n
+            - Each value of the model should be between 0 and 100\n
+            - IF you can't determine information of a field, set it to null\n
+            - IF you can't determine any informations, format output as JSON object followind this format:\n
+            {\n
+              error: string // Explain why you can't determine any informations\n
+            }\n`
         }
     ];
 

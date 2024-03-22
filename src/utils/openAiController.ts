@@ -1,6 +1,6 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
-import IMessage from './interfaces/IMessage';
+import IMessage from '../interfaces/IMessage';
 
 dotenv.config();
 
