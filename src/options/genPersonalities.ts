@@ -1,11 +1,13 @@
-import fs from 'fs';
-import path from 'path';
-import Loading from '../loading';
-import { JSON_INPUT_FOLDER } from '../paths';
-import genPersonality from '../genPersonality';
-import { IOption } from '../interfaces/IOption';
+import fs from "fs";
+import path from "path";
+import Loading from "../utils/loading";
+import { JSON_INPUT_FOLDER } from "../utils/paths";
+import genPersonality from "../utils/genPersonality";
+import { IOption } from "../interfaces/IOption";
 
-const genPersonalities: IOption = {flags: ['g', 'genPersonalities'], fn: async (flags) => {
+const genPersonalities: IOption = {
+  flags: ["g", "genPersonalities"],
+  fn: async (flags) => {
     const fileName = `${Date.now()}.json`;
     const personalities: { text: string }[] = [];
     const loading = new Loading();
@@ -24,6 +26,7 @@ const genPersonalities: IOption = {flags: ['g', 'genPersonalities'], fn: async (
         `Personality generated! [${i + 1}/${flags.genPersonalities}]`
       );
     }
-  }}
+  },
+};
 
 export default genPersonalities;

@@ -1,5 +1,5 @@
 import fs from "fs";
-import args from "args";
+import args, { option } from "args";
 import {
   ANALYZED_FILE,
   INPUT_FOLDER,
@@ -13,7 +13,7 @@ import { IOption } from "./interfaces/IOption";
 
 args
   .option("gen-personalities", "Gen personalities to analyze", 0)
-  .option("analyze", "Analyze inputs to gen training files", false)
+  .option("analyze", "Analyze inputs to gen training files", false);
 
 const flags = args.parse(process.argv);
 
@@ -31,7 +31,7 @@ for (const folder of folders) {
   }
 }
 
-if (!fs.existsSync(ANALYZED_FILE)) fs.writeFileSync(ANALYZED_FILE, '');
+if (!fs.existsSync(ANALYZED_FILE)) fs.writeFileSync(ANALYZED_FILE, "");
 
 const jsonInputFiles = fs.readdirSync(JSON_INPUT_FOLDER);
 const pdfInputFiles = fs.readdirSync(PDF_INPUT_FOLDER);
@@ -41,11 +41,18 @@ const options: IOption[] = [];
 async function main() {
   await register(options);
 
-  options.forEach((option) => {
-    option.flags.forEach(flag => { 
-        Number(flags[flag]) === 1 && option.fn(flags);
-    })
-  })
+  console.log(options);
+
+  // options.forEach((option) => {
+  //   option.flags.forEach((flag) => {
+  //     Number(flags[flag]) === 1 && option.fn(flags);
+  //   });
+  // });
+  for (const flag in flags) {
+    console.log(flags);
+
+    Number(flags[flag]) >= 1 && console.log(flag, flags[flag]);
+  }
 }
 
 main();
