@@ -5,7 +5,7 @@ import Loading from "../utils/loading";
 import { analyzeJson, analyzePdf } from "../utils/analyzer";
 import { ANALYZED_FILE, JSON_INPUT_FOLDER, OUTPUT_FOLDER, PDF_INPUT_FOLDER } from "../utils/paths";
 
-const analyze: IOption = {flags: ['a', 'analyze'], fn: async (flags) => {
+const analyze: IOption = {flags: ['analyze'], fn: async (flags) => {
     const jsonInputFiles = fs.readdirSync(JSON_INPUT_FOLDER);
     const pdfInputFiles = fs.readdirSync(PDF_INPUT_FOLDER);
     const outputFilePath = path.join(OUTPUT_FOLDER, `${Date.now()}.jsonl`);
@@ -34,3 +34,5 @@ const analyze: IOption = {flags: ['a', 'analyze'], fn: async (flags) => {
         fs.appendFileSync(ANALYZED_FILE, path.join('pdf', pdfInputFiles[i]) + '\n')
       }
 }}}
+
+export default analyze;

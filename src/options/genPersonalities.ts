@@ -6,7 +6,7 @@ import genPersonality from "../utils/genPersonality";
 import { IOption } from "../interfaces/IOption";
 
 const genPersonalities: IOption = {
-  flags: ["g", "genPersonalities"],
+  flags: ["genPersonalities"],
   fn: async (flags) => {
     const fileName = `${Date.now()}.json`;
     const personalities: { text: string }[] = [];

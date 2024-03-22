@@ -41,17 +41,14 @@ const options: IOption[] = [];
 async function main() {
   await register(options);
 
-  console.log(options);
-
-  // options.forEach((option) => {
-  //   option.flags.forEach((flag) => {
-  //     Number(flags[flag]) === 1 && option.fn(flags);
-  //   });
-  // });
   for (const flag in flags) {
-    console.log(flags);
-
-    Number(flags[flag]) >= 1 && console.log(flag, flags[flag]);
+    if (Number(flags[flag]) >= 1) {
+      for (const option of options) {
+        if (option.flags.includes(flag)) {
+          option.fn(flags);
+        }
+      }
+    }
   }
 }
 
