@@ -1,5 +1,5 @@
 import fs from "fs";
-import args, { option } from "args";
+import args from "args";
 import {
   ANALYZED_FILE,
   INPUT_FOLDER,
@@ -32,9 +32,6 @@ for (const folder of folders) {
 }
 
 if (!fs.existsSync(ANALYZED_FILE)) fs.writeFileSync(ANALYZED_FILE, "");
-
-const jsonInputFiles = fs.readdirSync(JSON_INPUT_FOLDER);
-const pdfInputFiles = fs.readdirSync(PDF_INPUT_FOLDER);
 
 const options: IOption[] = [];
 

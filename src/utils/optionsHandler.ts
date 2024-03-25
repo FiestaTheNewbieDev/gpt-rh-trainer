@@ -8,7 +8,9 @@ const pGlob = promisify(glob);
 // !WARNING! Handlers work only if glob is version 7.2.0
 
 async function loadOptions(options: IOption[], dir: string) {
-  const files = await pGlob(path.join(dir, "*.ts"));
+  const files = await pGlob(
+    path.join(dir, `*${process.env.NODE_ENV === "production" ? ".js" : ".ts"}`)
+  );
 
   files.forEach(async (optionFile: string) => {
     const option: IOption = await import(optionFile).then(
@@ -33,5 +35,13 @@ async function loadOptions(options: IOption[], dir: string) {
 }
 
 export default async function register(options: IOption[]) {
-  await loadOptions(options, path.join(process.cwd(), "/src/options"));
+  switch (process.env.NODE_ENV) {
+    case "development":
+      await loadOptions(options, path.join(process.cwd(), "/src/options"));
+      break;
+    case "production":
+      await loadOptions(options, path.join(process.cwd(), "/build/options"));
+    default:
+      throw new Error('Unknown environment');
+  }
 }

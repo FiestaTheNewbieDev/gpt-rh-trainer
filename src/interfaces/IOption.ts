@@ -1,4 +1,4 @@
 export type IOption = {
-  fn: (flags) => void,
-  flags: string[]
-}
+  fn: (flags) => void;
+  flags: string[];
+};
